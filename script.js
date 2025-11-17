@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       e.preventDefault();
       const name = a.dataset.link;
       const idx = name === 'projects' ? 1 : 0;
-      scrollToPanel(idx);
+      scrollToPanel(idx, true);
     });
   });
 
@@ -52,18 +52,26 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 
   // mouse wheel horizontal navigation
-let wheelTimeout;
+  let wheelTimeout;
+  let accumulatedScroll = 0;
 
-container.addEventListener('wheel', (e) => {
-  e.preventDefault();
-  container.scrollLeft += e.deltaY;
-
-  clearTimeout(wheelTimeout);
-  wheelTimeout = setTimeout(() => {
-    const visibleIndex = Math.round(container.scrollLeft / container.clientWidth);
-    scrollToPanel(visibleIndex);
-  }, 120);
-}, { passive: false });
+  container.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    accumulatedScroll += e.deltaY;
+    
+    // Change page if accumulated scroll exceeds threshold
+    if (Math.abs(accumulatedScroll) > 150) {
+      const visibleIndex = Math.round(container.scrollLeft / container.clientWidth);
+      if (accumulatedScroll > 0) {
+        const next = Math.min(visibleIndex + 1, panels.length - 1);
+        scrollToPanel(next, true);
+      } else {
+        const prev = Math.max(visibleIndex - 1, 0);
+        scrollToPanel(prev, true);
+      }
+      accumulatedScroll = 0;
+    }
+  }, { passive: false });
 
   // On load: set initial state according to path
   if(location.pathname.includes('/projects')){
