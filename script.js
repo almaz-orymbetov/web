@@ -4,13 +4,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const panels = Array.from(document.querySelectorAll('.card'));
   const links = document.querySelectorAll('[data-link]');
 
+  // Detect base path (for GitHub Pages subdirectory support)
+  const basePath = window.location.pathname.includes('/web/') || window.location.pathname.includes('/web') 
+    ? '/web' 
+    : '';
+
   function scrollToPanel(index, push=true){
     const panel = panels[index];
     if(!panel) return;
     const left = panel.offsetLeft;
     container.scrollTo({left, behavior:'smooth'});
     if(push){
-      const url = index === 0 ? '/' : '/projects';
+      const url = index === 0 ? basePath + '/' : basePath + '/projects';
       history.pushState({page:index===0?'home':'projects'}, '', url);
     }
   }
@@ -27,7 +32,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   // handle popstate
   window.addEventListener('popstate', (e)=>{
-    const state = (e.state && e.state.page) || (location.pathname === '/projects' ? 'projects' : 'home');
+    const pathname = location.pathname;
+    const isProjects = pathname.includes('/projects');
+    const state = (e.state && e.state.page) || (isProjects ? 'projects' : 'home');
     const idx = state === 'projects' ? 1 : 0;
     const panel = panels[idx] || panels[0];
     container.scrollTo({left: panel.offsetLeft, behavior:'smooth'});
@@ -47,11 +54,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 
   // On load: set initial state according to path
-  if(location.pathname === '/projects'){
-    history.replaceState({page:'projects'}, '', '/projects');
+  if(location.pathname.includes('/projects')){
+    history.replaceState({page:'projects'}, '', basePath + '/projects');
     container.scrollTo({left: panels[1].offsetLeft, behavior:'auto'});
   } else {
-    history.replaceState({page:'home'}, '', '/');
+    history.replaceState({page:'home'}, '', basePath + '/');
     container.scrollTo({left: panels[0].offsetLeft, behavior:'auto'});
   }
 });
