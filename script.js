@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const links = document.querySelectorAll('[data-link]');
 
   // Detect base path (for GitHub Pages subdirectory support)
-  const basePath = window.location.pathname.includes('/web/') || window.location.pathname.includes('/web') 
+const basePath = window.location.pathname.replace(/\/(projects)?\/?$/, '');
     ? '/web' 
     : '';
 
@@ -53,12 +53,26 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   });
 
+  // mouse wheel horizontal navigation
+let wheelTimeout;
+
+container.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  container.scrollLeft += e.deltaY;
+
+  clearTimeout(wheelTimeout);
+  wheelTimeout = setTimeout(() => {
+    const visibleIndex = Math.round(container.scrollLeft / container.clientWidth);
+    scrollToPanel(visibleIndex);
+  }, 120);
+}, { passive: false });
+
   // On load: set initial state according to path
   if(location.pathname.includes('/projects')){
     history.replaceState({page:'projects'}, '', basePath + '/projects');
     container.scrollTo({left: panels[1].offsetLeft, behavior:'auto'});
   } else {
-    history.replaceState({page:'home'}, '', basePath + '/');
+    history.replaceState({page:'home'}, '', basePath + '/web');
     container.scrollTo({left: panels[0].offsetLeft, behavior:'auto'});
   }
 });
