@@ -5,9 +5,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const links = document.querySelectorAll('[data-link]');
 
   // Detect base path (for GitHub Pages subdirectory support)
-const basePath = window.location.pathname.replace(/\/(projects)?\/?$/, '');
-    ? '/web' 
-    : '';
+  const basePath = window.location.pathname.includes('/web') ? '/web' : '';
 
   function scrollToPanel(index, push=true){
     const panel = panels[index];
@@ -72,7 +70,7 @@ container.addEventListener('wheel', (e) => {
     history.replaceState({page:'projects'}, '', basePath + '/projects');
     container.scrollTo({left: panels[1].offsetLeft, behavior:'auto'});
   } else {
-    history.replaceState({page:'home'}, '', basePath + '/web');
+    history.replaceState({page:'home'}, '', basePath + '/');
     container.scrollTo({left: panels[0].offsetLeft, behavior:'auto'});
   }
 });
