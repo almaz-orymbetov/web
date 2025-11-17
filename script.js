@@ -51,6 +51,33 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   });
 
+  // Touch/swipe navigation for mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  container.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, false);
+
+  container.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    const threshold = 50;
+
+    if (Math.abs(diff) > threshold) {
+      const visibleIndex = Math.round(container.scrollLeft / container.clientWidth);
+      if (diff > 0) {
+        // Swiped left - go right
+        const next = Math.min(visibleIndex + 1, panels.length - 1);
+        scrollToPanel(next, true);
+      } else {
+        // Swiped right - go left
+        const prev = Math.max(visibleIndex - 1, 0);
+        scrollToPanel(prev, true);
+      }
+    }
+  }, false);
+
   // mouse wheel horizontal navigation
   let wheelTimeout;
   let accumulatedScroll = 0;
