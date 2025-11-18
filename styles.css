@@ -10,8 +10,49 @@
 html,body{height:100%;margin:0;font-family:'JetBrains Mono','Courier New',monospace}
 body{background:var(--bg);color:#eaeaea}
 
-.site-bg{position:fixed;inset:0;background:radial-gradient(ellipse at 20% 30%, rgba(58,70,84,0.18), transparent 15%), radial-gradient(ellipse at 80% 70%, rgba(20,28,40,0.25), transparent 20%), #050506;z-index:0;animation:gradientShift 8s ease-in-out infinite}
-.site-bg::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(transparent, rgba(0,0,0,0.2));mix-blend-mode:overlay;}
+.site-bg{position:fixed;inset:0;background:radial-gradient(ellipse at 20% 30%, rgba(58,70,84,0.18), transparent 15%), radial-gradient(ellipse at 80% 70%, rgba(20,28,40,0.25), transparent 20%), #050506;z-index:0;animation:gradientShift 8s ease-in-out infinite;overflow:hidden}
+.site-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 50%, rgba(74,163,255,0.08), transparent 25%), radial-gradient(circle at 80% 20%, rgba(100,80,255,0.06), transparent 30%);animation:gradientFloat 12s ease-in-out infinite;pointer-events:none}
+.site-bg::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(transparent, rgba(0,0,0,0.2));mix-blend-mode:overlay;animation:overlayFade 6s ease-in-out infinite}
+
+@keyframes gradientFloat{
+  0%{background:radial-gradient(circle at 20% 50%, rgba(74,163,255,0.08), transparent 25%), radial-gradient(circle at 80% 20%, rgba(100,80,255,0.06), transparent 30%)}
+  50%{background:radial-gradient(circle at 30% 60%, rgba(74,163,255,0.12), transparent 30%), radial-gradient(circle at 70% 30%, rgba(100,80,255,0.1), transparent 35%)}
+  100%{background:radial-gradient(circle at 20% 50%, rgba(74,163,255,0.08), transparent 25%), radial-gradient(circle at 80% 20%, rgba(100,80,255,0.06), transparent 30%)}
+}
+
+@keyframes overlayFade{
+  0%,100%{opacity:0.5}
+  50%{opacity:0.8}
+}
+
+/* Animated background orbs */
+.bg-orb{position:absolute;border-radius:50%;pointer-events:none;mix-blend-mode:screen}
+
+.orb-1{width:300px;height:300px;background:radial-gradient(circle, rgba(74,163,255,0.15), transparent 70%);top:-100px;left:-100px;animation:float1 20s ease-in-out infinite}
+
+.orb-2{width:400px;height:400px;background:radial-gradient(circle, rgba(100,80,255,0.1), transparent 70%);bottom:-150px;right:-150px;animation:float2 24s ease-in-out infinite}
+
+.orb-3{width:250px;height:250px;background:radial-gradient(circle, rgba(74,163,255,0.08), transparent 70%);top:50%;right:10%;animation:float3 18s ease-in-out infinite}
+
+@keyframes float1{
+  0%{transform:translate(0, 0) scale(1)}
+  33%{transform:translate(30px, -40px) scale(1.1)}
+  66%{transform:translate(-20px, 30px) scale(0.95)}
+  100%{transform:translate(0, 0) scale(1)}
+}
+
+@keyframes float2{
+  0%{transform:translate(0, 0) scale(1)}
+  33%{transform:translate(-40px, 30px) scale(0.95)}
+  66%{transform:translate(40px, -20px) scale(1.1)}
+  100%{transform:translate(0, 0) scale(1)}
+}
+
+@keyframes float3{
+  0%{transform:translate(0, 0) rotate(0deg) scale(1)}
+  50%{transform:translate(-30px, 30px) rotate(180deg) scale(1.05)}
+  100%{transform:translate(0, 0) rotate(360deg) scale(1)}
+}
 
 @keyframes gradientShift{
   0%{background:radial-gradient(ellipse at 20% 30%, rgba(58,70,84,0.18), transparent 15%), radial-gradient(ellipse at 80% 70%, rgba(20,28,40,0.25), transparent 20%), #050506}
